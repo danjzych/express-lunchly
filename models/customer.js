@@ -56,9 +56,29 @@ class Customer {
     return new Customer(customer);
   }
 
+  /** get top customers, mesaured by number of reservations. Length of result
+   * determined by argument "count"
+  */
+
+  static async topCustomers(count) {
+    const results = await db.query(
+      `SELECT c.id,
+              c.first_name AS "firstName",
+              c.last_name  AS "lastName",
+              c.phone as "phone",
+              c.notes as "notes"
+       FROM customers AS c
+       JOIN reservations AS r on c.id = r.customer_id
+       GROUP BY c.id
+       ORDER BY COUNT(r.id) DESC, c.last_name, c.first_name
+       LIMIT $1`, [count],
+      );
+
+      return results.rows.map(c => new Customer(c));
+  }
+
   /** Search for a customer by first and/or last name. */
-  //TODO: discuss best way to search here. Could restrict this to work by only
-  //first and or last name and split?
+
   static async search(term) {
     const preparedValues = term.split(' ').map(term => `%${term}%`);
     const whereQuery = preparedValues.length === 2

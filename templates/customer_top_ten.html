@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}Search Results{% endblock %}
-
+{% block title %}Customers{% endblock %}
 {% block content %}
 
-  <h1>Search Results</h1>
+  <a class="btn btn-primary" style="float: right" href="/add/">Add a Customer</a>
 
-  <ul style="column-count: 4">
+  <h1>Top Ten Customers</h1>
+
+  <ol style="column-count: 4">
     {% for customer in customers %}
       <li>
         <a href="/{{ customer.id }}/">
@@ -13,6 +14,6 @@
         </a>
       </li>
     {% endfor %}
-  </ul>
+  </ol>
 
 {% endblock %}

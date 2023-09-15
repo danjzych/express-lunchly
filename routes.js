@@ -19,11 +19,11 @@ router.get("/", async function (req, res, next) {
 
 /** Handle searching for a customer */
 
-router.get('/search-results', async function (req, res) {
+router.get('/search-results/', async function (req, res) {
   const term = req.query.search;
   const customers = await Customer.search(term);
 
-  return res.render('search-results.html', { customers })
+  return res.render('search_results.html', { customers })
 })
 
 /** Form to add a new customer. */
@@ -44,6 +44,12 @@ router.post("/add/", async function (req, res, next) {
 
   return res.redirect(`/${customer.id}/`);
 });
+
+router.get("/top-ten/", async function (req, res) {
+  const customers = await Customer.topCustomers(10);
+
+  return res.render("customer_top_ten.html", { customers });
+})
 
 /** Show a customer, given their ID. */
 
