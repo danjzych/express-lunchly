@@ -1,0 +1,23 @@
+{
+  "name": "lunchly",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Daniel Zych",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "*",
+    "express": "^5.0.0-beta",
+    "moment": "*",
+    "nunjucks": "*",
+    "pg": "*"
+  },
+  "devDependencies": {
+    "jest": "*",
+    "supertest": "*"
+  },
+  "description": ""
+}
