@@ -39,6 +39,38 @@ class Reservation {
 
     return results.rows.map(row => new Reservation(row));
   }
+
+  /** Save this reservation.
+   * TODO: discuss - customer_id's should be reassignable so reservations can
+   * be reassigned by management.
+   */
+
+  async save() {
+    if (this.id === undefined) {
+      const result = await db.query(
+            `INSERT INTO reservations (customer_id, start_at, num_guests, notes)
+             VALUES ($1, $2, $3, $4)
+             RETURNING id`,
+          [this.customerId, this.startAt, this.numGuests, this.notes],
+      );
+      this.id = result.rows[0].id;
+    } else {
+      await db.query(
+            `UPDATE reservations
+             SET customer_id=$1,
+                 start_at=$2,
+                 num_guests=$3,
+                 notes=$4
+             WHERE id = $5`, [
+            this.customerId,
+            this.startAt,
+            this.numGuests,
+            this.notes,
+            this.id,
+          ],
+      );
+    }
+  }
 }
 
 
