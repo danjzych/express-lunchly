@@ -63,7 +63,7 @@ class Customer {
     const preparedValues = term.split(' ').map(term => `%${term}%`);
     const whereQuery = preparedValues.length === 2
                      ? 'WHERE first_name LIKE $1 and last_name LIKE $2'
-                     : 'WHERE first_name LIKE $1'
+                     : 'WHERE first_name LIKE $1 OR last_name LIKE $1'
 
     const results = await db.query(
       `SELECT id,
