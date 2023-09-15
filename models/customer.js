@@ -59,7 +59,6 @@ class Customer {
   /** get top customers, mesaured by number of reservations. Length of result
    * determined by argument "count"
   */
-
   static async topCustomers(count) {
     const results = await db.query(
       `SELECT c.id,
@@ -78,12 +77,13 @@ class Customer {
   }
 
   /** Search for a customer by first and/or last name. */
+  //TODO: could use SQL concat method to simplify this function?
 
   static async search(term) {
     const preparedValues = term.split(' ').map(term => `%${term}%`);
     const whereQuery = preparedValues.length === 2
-                     ? 'WHERE first_name LIKE $1 and last_name LIKE $2'
-                     : 'WHERE first_name LIKE $1 OR last_name LIKE $1'
+                     ? 'WHERE first_name ILIKE $1 and last_name _LIKE $2'
+                     : 'WHERE first_name ILIKE $1 OR last_name ILIKE $1';
 
     const results = await db.query(
       `SELECT id,

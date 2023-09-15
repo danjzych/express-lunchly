@@ -42,7 +42,7 @@ class Reservation {
 
   /** Save this reservation.
    * TODO: discuss - customer_id's should be reassignable so reservations can
-   * be reassigned by management.
+   * be reassigned by management. Maybe make a method to transfer it?
    */
 
   async save() {
