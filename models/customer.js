@@ -56,6 +56,30 @@ class Customer {
     return new Customer(customer);
   }
 
+  /** Search for a customer by first and/or last name. */
+  //TODO: discuss best way to search here. Could restrict this to work by only
+  //first and or last name and split?
+  static async search(term) {
+    const preparedValues = term.split(' ').map(term => `%${term}%`);
+    const whereQuery = preparedValues.length === 2
+                     ? 'WHERE first_name LIKE $1 and last_name LIKE $2'
+                     : 'WHERE first_name LIKE $1'
+
+    const results = await db.query(
+      `SELECT id,
+              first_name as "firstName",
+              last_name as "lastName",
+              phone,
+              notes
+       FROM customers
+       ${whereQuery}
+       ORDER BY last_name, first_name`,
+      preparedValues
+    );
+
+    return results.rows.map(c => new Customer(c));
+  }
+
   /** Get a customers full name as a string. */
 
   fullName() {

@@ -17,6 +17,15 @@ router.get("/", async function (req, res, next) {
   return res.render("customer_list.html", { customers });
 });
 
+/** Handle searching for a customer */
+
+router.get('/search-results', async function (req, res) {
+  const term = req.query.search;
+  const customers = await Customer.search(term);
+
+  return res.render('search-results.html', { customers })
+})
+
 /** Form to add a new customer. */
 
 router.get("/add/", async function (req, res, next) {
@@ -91,5 +100,6 @@ router.post("/:id/add-reservation/", async function (req, res, next) {
 
   return res.redirect(`/${customerId}/`);
 });
+
 
 module.exports = router;
