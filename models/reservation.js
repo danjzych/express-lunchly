@@ -23,6 +23,10 @@ class Reservation {
     return moment(this.startAt).format("MMMM Do YYYY, h:mm a");
   }
 
+  getInputFormattedStartAt() {
+    return moment(this.startAt).format('YYYY-M-D, hh:mm:ss a');
+  }
+
   /** given a customer id, find their reservations. */
 
   static async getReservationsForCustomer(customerId) {
@@ -40,10 +44,29 @@ class Reservation {
     return results.rows.map(row => new Reservation(row));
   }
 
-  /** Save this reservation.
-   * TODO: discuss - customer_id's should be reassignable so reservations can
-   * be reassigned by management. Maybe make a method to transfer it?
-   */
+  static async get(id) {
+    const results = await db.query(
+      `SELECT id,
+              customer_id AS "customerId",
+              num_guests AS "numGuests",
+              start_at AS "startAt",
+              notes AS "notes"
+       FROM reservations
+       WHERE id = $1`,
+    [id],
+    );
+    const reservation = results.rows[0];
+
+    if (reservation === undefined) {
+      const err = new Error(`No such reservation: ${id}`);
+      err.status = 404;
+      throw err;
+    }
+
+    return new Reservation(reservation);
+  }
+
+  /** Save this reservation. */
 
   async save() {
     if (this.id === undefined) {
